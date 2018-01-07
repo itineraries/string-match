@@ -13,6 +13,7 @@ matcher.o: matcher.cpp matcher.h
 	$(CPPCC) $(CPPFLAGS) -c -fPIC -o matcher.o matcher.cpp
 
 test: test.o
+	python3 test.py; echo
 	LD_LIBRARY_PATH=. ./test.o; echo
 
 clean:
