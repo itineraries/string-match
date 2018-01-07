@@ -212,15 +212,7 @@ bool Match_ArraysOfWCStrings(
 	size_t* results,
 	score_t* results_scores
 ){
-	vector<wstring> firsts;
-	vector<wstring> seconds;
-	firsts.reserve(len_a);
-	seconds.reserve(len_b);
-	for(size_t i = 0; i < len_a; ++i){
-		firsts.emplace_back(a[i]);
-	}
-	for(size_t i = 0; i < len_b; ++i){
-		seconds.emplace_back(b[i]);
-	}
+	vector<wstring> firsts(a, a + len_a);
+	vector<wstring> seconds(b, b + len_b);
 	return Match_ContainersOfContainers(firsts, seconds, results, results_scores);
 }
