@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-import collections, ctypes
-libmatcher = ctypes.cdll.LoadLibrary("./libmatcher.so")
+import collections, ctypes, os.path
+libmatcher = ctypes.cdll.LoadLibrary(os.path.join(os.path.dirname(__file__), "libmatcher.so"))
 libmatcher.ComputeScore_CStrings.restype = ctypes.c_uint
 libmatcher.ComputeScore_WCStrings.restype = ctypes.c_uint
 libmatcher.Match_ArraysOfWCStrings.restype = ctypes.c_bool
