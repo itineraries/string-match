@@ -19,8 +19,11 @@ using std::vector;
 using std::wstring;
 typedef pair<size_t, size_t> Location;
 struct ScoreAndLocation {
-	ScoreAndLocation(score_t score, size_t location_first, size_t location_second)
-		: score(score), location(location_first, location_second) {}
+	ScoreAndLocation(
+		score_t score,
+		size_t location_first,
+		size_t location_second
+	) : score(score), location(location_first, location_second) {}
 	score_t score;
 	Location location;
 };
@@ -47,13 +50,17 @@ score_t ComputeScore_Containers(const T1& first, const T2& second){
 	if(!(first.size() && second.size())){
 		return 0;
 	}
-	// This is a textbook example of Dijkstra's algorithm.
-	// The two strings form the axes of a rectangular grid.
-	// The grid becomes a directed graph with three edges from each point on the grid:
+	// This is a textbook example of the uniform cost search algorithm. The
+	// two strings form the axes of a rectangular grid. The grid becomes a
+	// directed graph with three edges from each point on the grid:
 	//   1. To the next letters in both words
 	//   2. To the next letter in the first word
 	//   3. To the next letter in the second word
-	priority_queue<ScoreAndLocation, vector<ScoreAndLocation>, greater<ScoreAndLocation>> q;
+	priority_queue<
+		ScoreAndLocation,
+		vector<ScoreAndLocation>,
+		greater<ScoreAndLocation>
+	> q;
 	// In the beginning, nothing has been visited yet.
 	vector<vector<bool>> visited(first.size(), vector<bool>(second.size()));
 	// Start at the zero offsets in both strings. Initialize the score to 1.
@@ -71,7 +78,8 @@ score_t ComputeScore_Containers(const T1& first, const T2& second){
 				if(next_second_valid){
 					// Follow the edge to the next items in both containers.
 					q.emplace(
-						q.top().score + (first[next_first] == second[next_second] ? 0 : 1),
+						q.top().score +
+							(first[next_first] == second[next_second] ? 0 : 1),
 						next_first,
 						next_second
 					);
@@ -79,19 +87,30 @@ score_t ComputeScore_Containers(const T1& first, const T2& second){
 				// Follow the edge to the next item in the first container
 				// and the same item in the second container.
 				q.emplace(
-					q.top().score + (first[next_first] == second[q.top().location.second] ? 0 : 1),
+					q.top().score +
+						(
+							first[next_first] ==
+								second[q.top().location.second]
+							? 0 : 1
+						),
 					next_first,
 					q.top().location.second
 				);
 			}else if(!next_second_valid){
-				// This is the last node. We have reached the ends of both containers.
+				// This is the last node.
+				// We have reached the ends of both containers.
 				return q.top().score;
 			}
 			if(next_second_valid){
 				// Follow the edge to the same item in the first container
 				// and the next item in the second container.
 				q.emplace(
-					q.top().score + (first[q.top().location.first] == second[next_second] ? 0 : 1),
+					q.top().score +
+						(
+							first[q.top().location.first] ==
+								second[next_second]
+							? 0 : 1
+						),
 					q.top().location.first,
 					next_second
 				);
@@ -181,7 +200,10 @@ bool Match_ContainersOfContainers(
 	// Now, find matches so that the scores are the lowest and that
 	// no item matches with more than one item.
 	for(const ScoreAndLocation& s : scores){
-		if(!matched_firsts[s.location.first] && !matched_seconds[s.location.second]){
+		if(
+			!matched_firsts[s.location.first] &&
+			!matched_seconds[s.location.second]
+		){
 			matched_firsts[s.location.first] = true;
 			matched_seconds[s.location.second] = true;
 			results[s.location.first] = s.location.second;
@@ -214,5 +236,10 @@ bool Match_ArraysOfWCStrings(
 ){
 	vector<wstring> firsts(a, a + len_a);
 	vector<wstring> seconds(b, b + len_b);
-	return Match_ContainersOfContainers(firsts, seconds, results, results_scores);
+	return Match_ContainersOfContainers(
+		firsts,
+		seconds,
+		results,
+		results_scores
+	);
 }

@@ -1,11 +1,17 @@
 #!/usr/bin/env python3
 import collections, ctypes, os.path
-libmatcher = ctypes.cdll.LoadLibrary(os.path.join(os.path.dirname(__file__), "libmatcher.so"))
+libmatcher = ctypes.cdll.LoadLibrary(
+    os.path.join(os.path.dirname(__file__), "libmatcher.so")
+)
 c_score_t = ctypes.c_uint
 libmatcher.ComputeScore_CStrings.restype = c_score_t
-libmatcher.ComputeScore_CStrings.argtypes = (ctypes.c_char_p, ctypes.c_char_p)
+libmatcher.ComputeScore_CStrings.argtypes = (
+    ctypes.c_char_p, ctypes.c_char_p
+)
 libmatcher.ComputeScore_WCStrings.restype = c_score_t
-libmatcher.ComputeScore_WCStrings.argtypes = (ctypes.c_wchar_p, ctypes.c_wchar_p)
+libmatcher.ComputeScore_WCStrings.argtypes = (
+    ctypes.c_wchar_p, ctypes.c_wchar_p
+)
 libmatcher.Match_ArraysOfWCStrings.restype = ctypes.c_bool
 libmatcher.Match_ArraysOfWCStrings.argtypes = (
     ctypes.c_size_t, ctypes.POINTER(ctypes.c_wchar_p),
@@ -24,7 +30,10 @@ def compute_score_str(str_a, str_b):
         ctypes.c_wchar_p(str_a),
         ctypes.c_wchar_p(str_b)
     )
-StringMatch = collections.namedtuple("StringMatch", "from_list_a from_list_b score")
+StringMatch = collections.namedtuple(
+    "StringMatch",
+    "from_list_a from_list_b score"
+)
 def match_list_of_str(list_a, list_b):
     # Create the two output arrays.
     number_of_matches = min(len(list_a), len(list_b))
