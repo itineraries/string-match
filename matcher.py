@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 import collections, ctypes, os.path
 libmatcher = ctypes.cdll.LoadLibrary(os.path.join(os.path.dirname(__file__), "libmatcher.so"))
-libmatcher.ComputeScore_CStrings.restype = ctypes.c_uint
-libmatcher.ComputeScore_WCStrings.restype = ctypes.c_uint
+c_score_t = ctypes.c_uint
+libmatcher.ComputeScore_CStrings.restype = c_score_t
+libmatcher.ComputeScore_WCStrings.restype = c_score_t
 libmatcher.Match_ArraysOfWCStrings.restype = ctypes.c_bool
 
 def compute_score_bytes(bytes_a, bytes_b):
