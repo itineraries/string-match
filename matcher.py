@@ -3,8 +3,16 @@ import collections, ctypes, os.path
 libmatcher = ctypes.cdll.LoadLibrary(os.path.join(os.path.dirname(__file__), "libmatcher.so"))
 c_score_t = ctypes.c_uint
 libmatcher.ComputeScore_CStrings.restype = c_score_t
+libmatcher.ComputeScore_CStrings.argtypes = (ctypes.c_char_p, ctypes.c_char_p)
 libmatcher.ComputeScore_WCStrings.restype = c_score_t
+libmatcher.ComputeScore_WCStrings.argtypes = (ctypes.c_wchar_p, ctypes.c_wchar_p)
 libmatcher.Match_ArraysOfWCStrings.restype = ctypes.c_bool
+libmatcher.Match_ArraysOfWCStrings.argtypes = (
+    ctypes.c_size_t, ctypes.POINTER(ctypes.c_wchar_p),
+    ctypes.c_size_t, ctypes.POINTER(ctypes.c_wchar_p),
+    ctypes.POINTER(ctypes.c_size_t),
+    ctypes.POINTER(c_score_t)
+)
 
 def compute_score_bytes(bytes_a, bytes_b):
     return libmatcher.ComputeScore_CStrings(
